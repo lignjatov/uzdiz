@@ -11,14 +11,8 @@ import singleton.VrsteRepository;
 public class Tvrtka {
 
   public static void main(String[] args) {
-    // odkomentirat kadabude potrebno
-    /*
-     * if (!args.length == 9) {
-     * 
-     * }
-     */
 
-    inicijializirajStavke(args);
+    inicijalizirajStavke(args);
 
     Scanner unos = new Scanner(System.in);
 
@@ -26,19 +20,24 @@ public class Tvrtka {
     UredDostave uredDostave = new UredDostave();
 
 
-
-    // paketiInstance.loadData(args[0]);
-
     String input = null;
     do {
       input = unos.nextLine();
       if (input.contains("VR")) {
         int pomak = Integer.parseInt(input.split(" ")[1]);
         VirtualnoVrijeme virtualno = VirtualnoVrijeme.getInstance();
-        virtualno.pomakniVrijeme(pomak);
+        for (int i = 0; i < pomak; i++) {
+          try {
+            Thread.sleep(1000);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
 
-        uredPrijema.radi();
-        uredDostave.radi();
+          virtualno.pomakniVrijeme(1);
+          uredPrijema.radi();
+          uredDostave.radi();
+        }
+        System.out.println("Trenutno vrijeme: " + virtualno.vratiVrijemeString());
         continue;
       }
 
@@ -46,6 +45,7 @@ public class Tvrtka {
         case "IP":
           PaketiRepository a = PaketiRepository.getInstance();
           VirtualnoVrijeme virtualno = VirtualnoVrijeme.getInstance();
+
           break;
         case "Q":
           System.out.println("Izlazim iz programa");
@@ -56,33 +56,34 @@ public class Tvrtka {
     unos.close();
   }
 
-  private static void inicijializirajStavke(String[] arg) {
+  private static void inicijalizirajStavke(String[] arg) {
     PaketiRepository paketiInstance = PaketiRepository.getInstance();
     VozilaRepository vozilaInstance = VozilaRepository.getInstance();
     VrsteRepository vrsteInstance = VrsteRepository.getInstance();
 
 
-    // TODO: ovo napraviti varijabilnim
     Postavke postavke = Postavke.getInstance();
-    postavke.postaviPostavku("mt", "100");
-    postavke.postaviPostavku("vi", "10");
-    postavke.postaviPostavku("vs", "20.10.2023. 08:00:00");
-    postavke.postaviPostavku("ms", "600");
-    postavke.postaviPostavku("pr", "07:00");
-    postavke.postaviPostavku("kr", "19:00");
+    if (arg.length != 18) {
+      System.out.println("Nedovoljan broj argumenata!");
+      System.exit(0);
+    }
+    for (int i = 0; i < arg.length; i += 2) {
+      postavke.postaviPostavku(arg[i], arg[i + 1]);
+    }
 
     try {
-      paketiInstance.ucitajPodatke("/home/NWTiS_1/uzdiz/lignjatov_zadaca_1/podaci/DZ_1_paketi.csv");
-      vozilaInstance.ucitajPodatke("/home/NWTiS_1/uzdiz/lignjatov_zadaca_1/podaci/DZ_1_vozila.csv");
-      vrsteInstance.ucitajPodatke("/home/NWTiS_1/uzdiz/lignjatov_zadaca_1/podaci/DZ_1_vrste.csv");
-      VirtualnoVrijeme.getInstance().postaviVrijeme(postavke.dajPostavku("vs"));
-      VirtualnoVrijeme.getInstance().postaviKorekciju(Integer.parseInt(postavke.dajPostavku("ms")));
+      vrsteInstance.ucitajPodatke(postavke.dajPostavku("--vp"));
+      vozilaInstance.ucitajPodatke(postavke.dajPostavku("--pv"));
+      paketiInstance.ucitajPodatke(postavke.dajPostavku("--pp"));
+
+
+      VirtualnoVrijeme.getInstance().postaviVrijeme(postavke.dajPostavku("--vs"));
+      VirtualnoVrijeme.getInstance()
+          .postaviKorekciju(Integer.parseInt(postavke.dajPostavku("--ms")));
       VirtualnoVrijeme.getInstance().vratiVrijeme();
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
-
-
 
 }

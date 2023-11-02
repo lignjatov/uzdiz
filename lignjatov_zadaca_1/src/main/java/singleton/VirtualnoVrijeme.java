@@ -23,8 +23,8 @@ public class VirtualnoVrijeme {
     return instance;
   }
 
-  public void postaviKorekciju(int korekcija) {
-    this.korekcija = korekcija;
+  public void postaviKorekciju(int skalar) {
+    korekcija = skalar;
   }
 
   public void postaviVrijeme(String pocetnoVrijeme) {

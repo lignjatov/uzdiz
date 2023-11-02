@@ -1,8 +1,9 @@
 package entity;
 
 import java.sql.Timestamp;
+import interfaces.PaketPrototype;
 
-public class Paket {
+public class Paket implements PaketPrototype {
   String oznaka;
   Timestamp vrijemePrijema;
   String posiljatelj;
@@ -14,6 +15,23 @@ public class Paket {
   Float tezina;
   String uslugaDostave;
   Float iznosPouzeca;
+
+  public Paket(Paket target) {
+    super();
+    if (target != null) {
+      this.oznaka = target.oznaka;
+      this.vrijemePrijema = target.vrijemePrijema;
+      this.posiljatelj = target.posiljatelj;
+      this.primatelj = target.primatelj;
+      this.vrstaPaketa = target.vrstaPaketa;
+      this.visina = target.visina;
+      this.sirina = target.sirina;
+      this.duzina = target.duzina;
+      this.tezina = target.tezina;
+      this.uslugaDostave = target.uslugaDostave;
+      this.iznosPouzeca = target.iznosPouzeca;
+    }
+  }
 
   @Override
   public String toString() {
@@ -108,6 +126,11 @@ public class Paket {
 
   public void setIznosPouzeca(Float iznosPouzeca) {
     this.iznosPouzeca = iznosPouzeca;
+  }
+
+  @Override
+  public PaketPrototype kloniraj() {
+    return new Paket(this);
   }
 
 }

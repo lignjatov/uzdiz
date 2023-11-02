@@ -8,35 +8,50 @@ import singleton.VirtualnoVrijeme;
 
 public class UredPrijema {
   List<Paket> listaPrimljenihPaketa = new ArrayList<Paket>();
-
   Timestamp zadnjeVrijeme;
 
   public UredPrijema() {
-    zadnjeVrijeme = VirtualnoVrijeme.getInstance().vratiVrijeme();
+    zadnjeVrijeme = new Timestamp(0);
   }
 
   public void radi() {
     provjeriNovePakete();
-
   };
 
-  private void naplatiDostavu() {}
+  public List<Paket> prenesiListuZaDostavu() {
+    List<Paket> listaZaDostavu = new ArrayList<Paket>();
+    for (Paket e : listaPrimljenihPaketa) {
+      listaZaDostavu.add(e);
+    }
+    listaPrimljenihPaketa.clear();
+    return listaZaDostavu;
+  }
 
-  private void provjeriNovePakete() {
-    PaketiRepository sviPaketi = PaketiRepository.getInstance();
+  private boolean provjeriNovePakete() {
     var trenutnoVrijeme = VirtualnoVrijeme.getInstance().vratiVrijeme();
     if (zadnjeVrijeme.compareTo(trenutnoVrijeme) < 0) {
       zapisiPaket(trenutnoVrijeme);
+      return true;
     }
+    return false;
   }
 
   private void zapisiPaket(Timestamp trenutnoVrijeme) {
     List<Paket> paketi = PaketiRepository.getInstance().dajPodatke();
     for (Paket p : paketi) {
-      if (p.getVrijemePrijema().compareTo(trenutnoVrijeme) < 0) {
-        System.out.println(p.toString());
+      if (p.getVrijemePrijema().compareTo(trenutnoVrijeme) < 0
+          && p.getVrijemePrijema().compareTo(zadnjeVrijeme) > 0) {
         listaPrimljenihPaketa.add(p);
+        naplatiDostavu(p);
+        zadnjeVrijeme = p.getVrijemePrijema();
       }
     }
-  };
+  }
+
+  private void naplatiDostavu(Paket paket) {
+    System.out.println(
+        "Dostava " + paket.getOznaka() + " se naplaćuje: " + paket.getIznosPouzeca() + "kn");
+  }
+
+
 }
