@@ -13,7 +13,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>Tvrtka</mainClass>
+                            <mainClass>main.Tvrtka</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

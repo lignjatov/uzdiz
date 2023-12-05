@@ -1,24 +1,22 @@
 package entity;
 
+import java.sql.Array;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+
+import observer.Subscriber;
 import singleton.PaketiRepository;
 import singleton.VirtualnoVrijeme;
 import singleton.VrsteRepository;
 
 public class UredPrijema {
   List<Paket> listaPrimljenihPaketa = new ArrayList<Paket>();
+  List<Subscriber> listaOsobaSubscriber = new ArrayList<Subscriber>();
+
   Timestamp zadnjeVrijeme;
 
   public UredPrijema() {
-    /*
-     * DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm"); LocalDateTime
-     * localDateTime =
-     * LocalDateTime.from(formatter.parse(Postavke.getInstance().dajPostavku("--pr"))); var
-     * pocetnoVrijeme = Timestamp.valueOf(localDateTime); zadnjeVrijeme = pocetnoVrijeme;
-     */
-
     zadnjeVrijeme = new Timestamp(0);
   }
 
@@ -82,8 +80,18 @@ public class UredPrijema {
         paket.setIznosPouzeca(vrsta.cijena);
       }
     }
+    String poruka = "Prijem paketa " + paket.getOznaka() + " se naplaćuje: " + paket.getIznosPouzeca() + "kn";
+    System.out.println(poruka);
+    posaljiPorukuPretplatnicima(poruka);
+  }
 
-    System.out.println(
-        "Prijem paketa " + paket.getOznaka() + " se naplaćuje: " + paket.getIznosPouzeca() + "kn");
+  public void dodajPretplatnika(Subscriber osoba){
+    listaOsobaSubscriber.add(osoba);
+  }
+
+  public void posaljiPorukuPretplatnicima(String poruka){
+    for (var osoba : listaOsobaSubscriber){
+      osoba.notificiraj(poruka);
+    }
   }
 }

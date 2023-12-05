@@ -1,9 +1,11 @@
 package main;
 import java.io.IOException;
+import java.util.Properties;
 import java.util.Scanner;
 import entity.UredDostave;
 import entity.UredPrijema;
 import helper.ArgumentChecker;
+import helper.PropertyFiller;
 import singleton.PaketiRepository;
 import singleton.Postavke;
 import singleton.VirtualnoVrijeme;
@@ -13,13 +15,19 @@ import singleton.VrsteRepository;
 public class Tvrtka {
 
   public static void main(String[] args) {
-
+  try{
     inicijalizirajStavke(args);
+  }
+  catch (Exception e){
+    System.out.println(e.getMessage());
+  }
+
 
     Scanner unos = new Scanner(System.in);
 
     UredPrijema uredPrijema = new UredPrijema();
     UredDostave uredDostave = new UredDostave();
+    VirtualnoVrijeme virtualno = VirtualnoVrijeme.getInstance();
 
     String input = null;
     do {
@@ -28,25 +36,22 @@ public class Tvrtka {
         int pomak = 0;
         try {
           pomak = Integer.parseInt(input.split(" ")[1]);
+          for (int i = 0; i < pomak; i++) {
+            try {
+              Thread.sleep(1000);
+            } catch (InterruptedException e) {
+              System.out.println(e.getMessage());
+            }
+            virtualno.pomakniVrijeme(1);
+            System.out.println(virtualno.vratiVrijemeString());
+            uredPrijema.radi();
+            uredDostave.dohvatiPaketeZaDostavu(uredPrijema.prenesiListuZaDostavu());
+            uredDostave.ukrcavaj();
+          }
+          System.out.println("Trenutno vrijeme: " + virtualno.vratiVrijemeString());
         } catch (Exception e) {
           System.out.println("Greška u radu: Nije navedeno vrijeme");
         }
-
-        VirtualnoVrijeme virtualno = VirtualnoVrijeme.getInstance();
-        for (int i = 0; i < pomak; i++) {
-          try {
-            Thread.sleep(1000);
-          } catch (InterruptedException e) {
-            System.out.println(e.getMessage());
-          }
-
-          virtualno.pomakniVrijeme(1);
-          uredPrijema.radi();
-          uredDostave.dohvatiPaketeZaDostavu(uredPrijema.prenesiListuZaDostavu());
-          uredDostave.ukrcavaj();
-        }
-        System.out.println("Trenutno vrijeme: " + virtualno.vratiVrijemeString());
-        continue;
       }
 
       switch (input) {
@@ -58,14 +63,20 @@ public class Tvrtka {
           break;
         default:
       }
-    } while (input.compareTo("Q") != 0);
+    } while (input.compareTo("Q") != 0 && !virtualno.prosloVrijemeRada());
+
+    if(virtualno.prosloVrijemeRada()){
+      System.out.println("Kraj radnog vremena!");
+    }
     unos.close();
   }
 
   private static void ispisiPodatke(UredDostave uredDostave) {
+    VirtualnoVrijeme virtualno = VirtualnoVrijeme.getInstance();
+    System.out.println("Trenutno vrijeme: " + virtualno.vratiVrijemeString());
     System.out.println(
         "VOZILO | PAKET | VRIJEME PRIJEMA | USLUGA | VRIJEME PREUZIMANJA | IZNOS DOSTAVE | STATUS");
-    VirtualnoVrijeme virtualno = VirtualnoVrijeme.getInstance();
+
     for (var e : uredDostave.dohvatiSveAute()) {
       for (var v : e.dohvatiPakete()) {
         String rezultat = e.vratiIme() + " | ";
@@ -87,23 +98,14 @@ public class Tvrtka {
 
   }
 
-  private static void inicijalizirajStavke(String[] arg) {
-    PaketiRepository paketiInstance = PaketiRepository.getInstance();
+  private static void inicijalizirajStavke(String[] arg) throws IOException {
+    /*PaketiRepository paketiInstance = PaketiRepository.getInstance();
     VozilaRepository vozilaInstance = VozilaRepository.getInstance();
     VrsteRepository vrsteInstance = VrsteRepository.getInstance();
 
 
     Postavke postavke = Postavke.getInstance();
 
-    ArgumentChecker provjeraArgumenata = new ArgumentChecker();
-
-    if (arg.length != 18) {
-      System.out.println("Nedovoljan broj argumenata!");
-      System.exit(0);
-    }
-    for (int i = 0; i < arg.length; i += 2) {
-      postavke.postaviPostavku(arg[i], arg[i + 1]);
-    }
 
     try {
       vrsteInstance.ucitajPodatke(postavke.dajPostavku("--vp"));
@@ -114,10 +116,25 @@ public class Tvrtka {
       VirtualnoVrijeme.getInstance().postaviVrijeme(postavke.dajPostavku("--vs"));
       VirtualnoVrijeme.getInstance()
           .postaviKorekciju(Integer.parseInt(postavke.dajPostavku("--ms")));
-      VirtualnoVrijeme.getInstance().vratiVrijeme();
     } catch (IOException e) {
       e.printStackTrace();
-    }
-  }
+    }*/
 
+    //Zadaća 2
+    PropertyFiller podaci = new PropertyFiller();
+    Properties properties = new Properties();
+    podaci.ucitajPodatke(arg[0],properties);
+
+    if(!podaci.provjeriProperty(properties)) {
+      System.exit(0);
+    }
+
+    System.out.println(properties.getProperty("--vs"));
+
+    VirtualnoVrijeme.getInstance().postaviVrijeme(properties.getProperty("--vs"));
+    VirtualnoVrijeme.getInstance()
+            .postaviKorekciju(Integer.parseInt(properties.getProperty("--ms")));
+    VirtualnoVrijeme.getInstance().postaviKrajnjeVrijeme(properties.getProperty("--kr"));
+
+  }
 }
