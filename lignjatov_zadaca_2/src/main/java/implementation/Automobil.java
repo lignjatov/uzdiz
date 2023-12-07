@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import entity.Paket;
 import interfaces.Vozilo;
-import singleton.Postavke;
+import singleton.DataRepository;
 import singleton.VirtualnoVrijeme;
 
 public class Automobil implements Vozilo {
@@ -35,7 +35,7 @@ public class Automobil implements Vozilo {
     LocalDateTime localDateTime = LocalDateTime.from(vrijeme.toLocalDateTime());
     for (var e : utovareniPaketi) {
       localDateTime =
-          localDateTime.plusMinutes(Long.parseLong(Postavke.getInstance().dajPostavku("--vi")));
+          localDateTime.plusMinutes(Long.parseLong(DataRepository.getInstance().vratiPostavke().getProperty("--vi")));
       vrijeme = Timestamp.valueOf(localDateTime);
       e.setVrijemePreuzimanja(vrijeme);
     }

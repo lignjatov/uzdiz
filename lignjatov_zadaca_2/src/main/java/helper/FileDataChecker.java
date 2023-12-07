@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import entity.VrstaPaketa;
-import singleton.VrsteRepository;
+import singleton.DataRepository;
 
 public class FileDataChecker {
   public static int brojGresaka = 0;
@@ -24,7 +24,7 @@ public class FileDataChecker {
         razlozi += "Vozilo:Unesen prazni element;";
       }
     }
-    if (linija.length != 5) {
+    if (linija.length != 8) {
       brojGresaka++;
       greska = true;
       razlozi += "Vozilo:Nisu uneseni svi parametri;";
@@ -77,8 +77,7 @@ public class FileDataChecker {
       greska = true;
       razlozi += "Paket:Nisu unesene sve vrijednosti;";
     }
-    List<VrstaPaketa> vrste = VrsteRepository.getInstance().dajPodatke();
-
+    List<VrstaPaketa> vrste = DataRepository.getInstance().vratiVrstaPaketa();
     List<String> oznake = new ArrayList<String>();
     for (VrstaPaketa e : vrste) {
       oznake.add(e.oznaka);
@@ -144,6 +143,10 @@ public class FileDataChecker {
     return razlozi;
   };
 
+  public String provjeriMjesto(String[] odsjek) {
+    //TODO: napraviti provjere datoteke
+    return "";
+  }
 
 
   ;

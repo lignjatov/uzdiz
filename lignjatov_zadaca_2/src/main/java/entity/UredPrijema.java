@@ -6,9 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import observer.Subscriber;
-import singleton.PaketiRepository;
+import singleton.DataRepository;
 import singleton.VirtualnoVrijeme;
-import singleton.VrsteRepository;
+
+import javax.xml.crypto.Data;
 
 public class UredPrijema {
   List<Paket> listaPrimljenihPaketa = new ArrayList<Paket>();
@@ -43,7 +44,7 @@ public class UredPrijema {
   }
 
   private void zapisiPaket(Timestamp trenutnoVrijeme) {
-    List<Paket> paketi = PaketiRepository.getInstance().dajPodatke();
+    List<Paket> paketi = DataRepository.getInstance().vratiListaPaketa();
     for (Paket p : paketi) {
       if (p.getVrijemePrijema().compareTo(trenutnoVrijeme) < 0
           && p.getVrijemePrijema().compareTo(zadnjeVrijeme) > 0) {
@@ -55,7 +56,7 @@ public class UredPrijema {
   }
 
   private void naplatiIznosDostave(Paket paket) {
-    List<VrstaPaketa> vrste = VrsteRepository.getInstance().dajPodatke();
+    List<VrstaPaketa> vrste = DataRepository.getInstance().vratiVrstaPaketa();
     VrstaPaketa vrsta = null;
     for (var e : vrste) {
       if (paket.vrstaPaketa.compareTo(e.oznaka) == 0) {

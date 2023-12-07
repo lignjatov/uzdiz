@@ -1,16 +1,23 @@
 package main;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
+
+import Composite.*;
 import entity.UredDostave;
 import entity.UredPrijema;
-import helper.ArgumentChecker;
+import factory.Citac;
+import factory.DataFactory;
+import factory.VrsteCitaca;
 import helper.PropertyFiller;
-import singleton.PaketiRepository;
-import singleton.Postavke;
-import singleton.VirtualnoVrijeme;
-import singleton.VozilaRepository;
-import singleton.VrsteRepository;
+import singleton.*;
+
+import javax.xml.crypto.Data;
 
 public class Tvrtka {
 
@@ -99,42 +106,144 @@ public class Tvrtka {
   }
 
   private static void inicijalizirajStavke(String[] arg) throws IOException {
-    /*PaketiRepository paketiInstance = PaketiRepository.getInstance();
-    VozilaRepository vozilaInstance = VozilaRepository.getInstance();
-    VrsteRepository vrsteInstance = VrsteRepository.getInstance();
-
-
-    Postavke postavke = Postavke.getInstance();
-
 
     try {
-      vrsteInstance.ucitajPodatke(postavke.dajPostavku("--vp"));
-      vozilaInstance.ucitajPodatke(postavke.dajPostavku("--pv"));
-      paketiInstance.ucitajPodatke(postavke.dajPostavku("--pp"));
+      //Zadaća 2
+      PropertyFiller podaci = new PropertyFiller();
+      Properties properties = new Properties();
+      podaci.ucitajPodatke(arg[0],properties);
+
+      if(!podaci.provjeriProperty(properties)) {
+        System.exit(0);
+      }
+
+      VirtualnoVrijeme instancaVrijeme = VirtualnoVrijeme.getInstance();
+      instancaVrijeme.postaviVrijeme(properties.getProperty("--vs"));
+      instancaVrijeme.postaviKorekciju(Integer.parseInt(properties.getProperty("--ms")));
+      instancaVrijeme.postaviKrajnjeVrijeme(properties.getProperty("--kr"));
 
 
-      VirtualnoVrijeme.getInstance().postaviVrijeme(postavke.dajPostavku("--vs"));
-      VirtualnoVrijeme.getInstance()
-          .postaviKorekciju(Integer.parseInt(postavke.dajPostavku("--ms")));
+      DataRepository data = DataRepository.getInstance();
+      DataFactory factory = new DataFactory();
+
+      Citac citaci = factory.vratiCitac(VrsteCitaca.VrstePaketa);
+      data.postaviListuVrstaPaketa(citaci.ucitajPodatke(properties.getProperty("--vp")));
+
+      citaci = factory.vratiCitac(VrsteCitaca.Paketi);
+      data.postaviListuPaketa(citaci.ucitajPodatke(properties.getProperty("--pp")));
+
+      citaci = factory.vratiCitac(VrsteCitaca.Vozila);
+      data.postaviListuVozila(citaci.ucitajPodatke(properties.getProperty("--pv")));
+
+      citaci = factory.vratiCitac(VrsteCitaca.Ulica);
+      data.postaviListuUlica(citaci.ucitajPodatke(properties.getProperty("--pu")));
+
+      citaci = factory.vratiCitac(VrsteCitaca.Mjesto);
+      data.postaviListuMjesta(citaci.ucitajPodatke(properties.getProperty("--pm")));
+
+      citaci = factory.vratiCitac(VrsteCitaca.Osoba);
+      data.postaviListuOsoba(citaci.ucitajPodatke(properties.getProperty("--po")));
+
+      for(var a : data.vratiListaOsoba()){
+        System.out.println(a.vratiIme());
+      }
+
+      data.postaviPostavke(properties);
+
+      Spremiste spremiste = data.vratiSpremiste();
+
+      dohvatiPodrucje(properties.getProperty("--pmu"),spremiste);
+
+
     } catch (IOException e) {
       e.printStackTrace();
-    }*/
-
-    //Zadaća 2
-    PropertyFiller podaci = new PropertyFiller();
-    Properties properties = new Properties();
-    podaci.ucitajPodatke(arg[0],properties);
-
-    if(!podaci.provjeriProperty(properties)) {
-      System.exit(0);
     }
+  }
 
-    System.out.println(properties.getProperty("--vs"));
+  private static void dohvatiPodrucje(String nazivDatoteke, Spremiste spremiste) {
+    var putanja = Path.of(nazivDatoteke);
+    if (Files.exists(putanja) && (Files.isDirectory(putanja) || !Files.isWritable(putanja))) {
+      System.out.println("Datoteka: '" + nazivDatoteke + "' nije datoteka ili nije moguće upisati u nju");
+      return;
+    }
+    int i = 0;
+    try{
+      var citac = Files.newBufferedReader(putanja, Charset.forName("UTF-8"));
+      while (true) {
+        var redak = citac.readLine();
+        if (redak == null)
+          break;
+        var odsjek = redak.split(";");
+        if (odsjek.length != 2) {
+          System.out.println("Nedovoljan broj atributa");
+        } else {
+          if (i == 0) {
+            i++;
+            continue;
+          }
 
-    VirtualnoVrijeme.getInstance().postaviVrijeme(properties.getProperty("--vs"));
-    VirtualnoVrijeme.getInstance()
-            .postaviKorekciju(Integer.parseInt(properties.getProperty("--ms")));
-    VirtualnoVrijeme.getInstance().postaviKrajnjeVrijeme(properties.getProperty("--kr"));
+          Podrucje podrucje = new Podrucje();
+          podrucje.postaviId(Integer.parseInt(odsjek[0]));
+          String[] kombinacije = odsjek[1].split(",");
 
+          for(String element : kombinacije){
+            String idGrada = element.split(":")[0].trim();
+            String idUlice = element.split(":")[1].trim();
+            if(idUlice.startsWith("*")){
+              for(Mjesto mjesto : DataRepository.getInstance().vratiListaMjesta()){
+                if(mjesto.getId()==Integer.parseInt(idGrada.trim())){
+                  podrucje.dodajMjesto(mjesto);
+                  break;
+                }
+              }
+            }
+            else{
+              if(postojiVrijednost(podrucje, vratiMjesto(Integer.parseInt(idGrada)))){
+                Mjesto staroMjesto = (Mjesto)podrucje.vratiMjesto(Integer.parseInt(idGrada));
+                staroMjesto.dodajUlicu(vratiUlicu(Integer.parseInt(idUlice)));
+              }else{
+                Mjesto novoMjesto = vratiMjesto(Integer.parseInt(idGrada));
+                novoMjesto.dodajUlicu(vratiUlicu(Integer.parseInt(idUlice)));
+                podrucje.dodajMjesto(novoMjesto);
+              }
+            }
+          }
+          spremiste.dodajKutiju(podrucje);
+        }
+      }
+    }catch(Exception e){
+      System.out.println(e.getMessage());
+    }
+  }
+  public static Mjesto vratiMjesto(int idMjesta){
+    for(var element : DataRepository.getInstance().vratiListaMjesta()){
+      if(element.getId()==idMjesta){
+        Mjesto novoMjesto = new Mjesto();
+        novoMjesto.setId(element.getId());
+        novoMjesto.setNaziv(element.getNaziv());
+        novoMjesto.setUlice(new ArrayList<Kutija>());
+        return novoMjesto;
+      }
+    }
+    return null;
+  }
+  public static Ulica vratiUlicu(int idUlice){
+    for(var element : DataRepository.getInstance().vratiListaUlica()){
+      if(element.vratiId()==idUlice){
+        return element;
+      }
+    }
+    return null;
+  }
+  public static boolean postojiVrijednost(Podrucje podrucje, Mjesto mjesto){
+    List<Kutija> trenutniElementi = podrucje.vratiListuKutija();
+    for(var vrijednost : trenutniElementi){
+      if(vrijednost instanceof Mjesto){
+        Mjesto lokacija = (Mjesto) vrijednost;
+        if(lokacija.getId()==mjesto.getId())
+          return true;
+      }
+    }
+    return false;
   }
 }

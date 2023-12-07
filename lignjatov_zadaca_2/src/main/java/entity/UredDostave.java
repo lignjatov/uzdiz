@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import implementation.VoziloFactory;
 import interfaces.Vozilo;
-import singleton.VozilaRepository;
+import singleton.DataRepository;
 
 public class UredDostave {
   List<Vozilo> vozniPark = new ArrayList<Vozilo>();
@@ -18,8 +18,8 @@ public class UredDostave {
     VoziloFactory a = new VoziloFactory();
     int redoslijed = 1;
     Vozilo automobil = a.napraviAuto(VrstaVozila.Automobil);
-    for (Vozilo b : VozilaRepository.getInstance().dajPodatke()) {
-      for (Vozilo e : VozilaRepository.getInstance().dajPodatke()) {
+    for (Vozilo b : DataRepository.getInstance().vratiListaVozila()) {
+      for (Vozilo e : DataRepository.getInstance().vratiListaVozila()) {
         if (e.vratiRedoslijed() == redoslijed) {
           vozniPark.add(e);
           redoslijed++;
