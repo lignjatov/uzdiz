@@ -38,7 +38,7 @@ public class Mjesto implements Kutija {
 
     @Override
     public void ispisiText() {
-        System.out.println("----Mjesto je " + naziv);
+        System.out.println("    Mjesto je " + naziv);
         for(Kutija ulica : ulice){
             ulica.ispisiText();
         }

@@ -1,8 +1,10 @@
 package factory;
 
 import entity.Paket;
+import entity.VrstaPaketa;
 import helper.FileDataChecker;
 import implementation.PaketBuilder;
+import singleton.DataRepository;
 
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -70,13 +72,23 @@ public class PaketiCitac implements Citac<Paket> {
             Timestamp paketVrijeme = Timestamp.valueOf(localDateTime);
 
 
-            a = builder.setOznaka(odsjek[0]).setVrijemePrijema(paketVrijeme).setPosiljatelj(odsjek[2])
-                    .setPrimatelj(odsjek[3]).setVrstaPaketa(odsjek[4])
-                    .setVisina(format.parse(odsjek[5]).floatValue())
-                    .setSirina(format.parse(odsjek[6]).floatValue())
-                    .setDuzina(format.parse(odsjek[7]).floatValue())
-                    .setTezina(format.parse(odsjek[8]).floatValue()).setUslugaDostave(odsjek[9])
+            builder.setOznaka(odsjek[0]).setVrijemePrijema(paketVrijeme).setPosiljatelj(odsjek[2])
+                    .setPrimatelj(odsjek[3]).setVrstaPaketa(odsjek[4]);
+            if(!odsjek[4].contains("X")){
+                for(VrstaPaketa vrsta : DataRepository.getInstance().vratiVrstaPaketa()){
+                    if(vrsta.oznaka.compareTo(odsjek[4])==0){
+                        builder.setVisina(vrsta.visina).setDuzina(vrsta.duzina).setSirina(vrsta.sirina);
+                    }
+                }
+            }
+            else{
+                builder.setVisina(format.parse(odsjek[5]).floatValue())
+                        .setSirina(format.parse(odsjek[6]).floatValue())
+                        .setDuzina(format.parse(odsjek[7]).floatValue());
+            }
+            a = builder.setTezina(format.parse(odsjek[8]).floatValue()).setUslugaDostave(odsjek[9])
                     .setIznosPouzeca(format.parse(odsjek[10]).floatValue()).build();
+
         } catch (ParseException e) {
             e.printStackTrace();
         }

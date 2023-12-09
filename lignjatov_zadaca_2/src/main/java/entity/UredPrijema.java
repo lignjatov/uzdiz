@@ -1,19 +1,15 @@
 package entity;
 
-import java.sql.Array;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import observer.Subscriber;
 import singleton.DataRepository;
 import singleton.VirtualnoVrijeme;
 
-import javax.xml.crypto.Data;
 
 public class UredPrijema {
   List<Paket> listaPrimljenihPaketa = new ArrayList<Paket>();
-  List<Subscriber> listaOsobaSubscriber = new ArrayList<Subscriber>();
 
   Timestamp zadnjeVrijeme;
 
@@ -81,18 +77,31 @@ public class UredPrijema {
         paket.setIznosPouzeca(vrsta.cijena);
       }
     }
+
+    dodajPretplatnike(paket);
     String poruka = "Prijem paketa " + paket.getOznaka() + " se naplaćuje: " + paket.getIznosPouzeca() + "kn";
-    System.out.println(poruka);
-    posaljiPorukuPretplatnicima(poruka);
+    paket.posaljiPorukuPretplatnicima(poruka);
   }
 
-  public void dodajPretplatnika(Subscriber osoba){
-    listaOsobaSubscriber.add(osoba);
-  }
-
-  public void posaljiPorukuPretplatnicima(String poruka){
-    for (var osoba : listaOsobaSubscriber){
-      osoba.notificiraj(poruka);
+  private void dodajPretplatnike(Paket posiljatelj) {
+    Osoba osobaPosiljatelj = vratiOsobu(posiljatelj.getPosiljatelj());
+    Osoba osobaPrimatelj = vratiOsobu(posiljatelj.getPrimatelj());
+    if(osobaPosiljatelj!=null){
+      posiljatelj.dodajPretplatnika(osobaPosiljatelj);
+    }
+    if(osobaPrimatelj!=null){
+      posiljatelj.dodajPretplatnika(osobaPrimatelj);
     }
   }
+
+  private Osoba vratiOsobu(String posiljatelj) {
+    for(var osoba : DataRepository.getInstance().vratiListaOsoba()){
+      if(posiljatelj.compareTo(osoba.vratiIme())==0){
+        return osoba;
+      }
+    }
+    return null;
+  }
+
+
 }

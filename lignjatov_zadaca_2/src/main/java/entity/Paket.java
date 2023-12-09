@@ -1,6 +1,10 @@
 package entity;
 
+import observer.Subscriber;
+
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Paket {
   String oznaka;
@@ -15,6 +19,9 @@ public class Paket {
   Float tezina;
   String uslugaDostave;
   Float iznosPouzeca;
+  public boolean status=false;
+
+  List<Subscriber> listaOsobaSubscriber = new ArrayList<Subscriber>();
 
   public Paket(Paket target) {
     super();
@@ -142,5 +149,15 @@ public class Paket {
 
   public void setIznosPouzeca(Float iznosPouzeca) {
     this.iznosPouzeca = iznosPouzeca;
+  }
+
+  public void dodajPretplatnika(Subscriber osoba){
+    listaOsobaSubscriber.add(osoba);
+  }
+
+  public void posaljiPorukuPretplatnicima(String poruka){
+    for (var osoba : listaOsobaSubscriber){
+       osoba.notificiraj(poruka);
+    }
   }
 }

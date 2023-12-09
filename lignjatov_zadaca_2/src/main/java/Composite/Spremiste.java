@@ -16,4 +16,20 @@ public class Spremiste implements Kutija{
             element.ispisiText();
         }
     }
+
+    public Podrucje vratiPodrucjePoUlici(Ulica ulica){
+        for(Kutija element : djeca){
+            Podrucje podrucja = (Podrucje)element;
+            for(Kutija mjesta : podrucja.vratiListuKutija()){
+                Mjesto mjesto = (Mjesto) mjesta;
+                for(var ulice : mjesto.getUlice()){
+                    Ulica ulicaa = (Ulica) ulice;
+                    if(ulicaa.vratiNaziv().compareTo(ulica.vratiNaziv())==0){
+                        return podrucja;
+                    }
+                }
+            }
+        }
+        return null;
+    }
 }

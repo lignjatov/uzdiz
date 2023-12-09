@@ -2,7 +2,7 @@ package factory;
 
 import entity.Osoba;
 import helper.FileDataChecker;
-import implementation.Automobil;
+import implementation.Vozilo;
 
 import java.nio.charset.Charset;
 import java.nio.file.Files;

@@ -6,7 +6,7 @@ import Composite.Ulica;
 import entity.Osoba;
 import entity.Paket;
 import entity.VrstaPaketa;
-import interfaces.Vozilo;
+import implementation.Vozilo;
 
 import java.util.ArrayList;
 import java.util.List;

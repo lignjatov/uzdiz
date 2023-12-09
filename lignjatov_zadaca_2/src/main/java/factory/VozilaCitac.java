@@ -2,7 +2,7 @@ package factory;
 
 import entity.Paket;
 import helper.FileDataChecker;
-import implementation.Automobil;
+import implementation.Vozilo;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class VozilaCitac implements Citac<Automobil>{
+public class VozilaCitac implements Citac<Vozilo>{
 
-    public List<Automobil> ucitajPodatke(String nazivDatoteke) {
-        List<Automobil> listaAutomobila = new ArrayList<Automobil>();
+    public List<Vozilo> ucitajPodatke(String nazivDatoteke) {
+        List<Vozilo> listaAutomobila = new ArrayList<Vozilo>();
         var putanja = Path.of(nazivDatoteke);
         if (Files.exists(putanja) && (Files.isDirectory(putanja) || !Files.isWritable(putanja))) {
             System.out.println("Datoteka: '" + nazivDatoteke + "' nije datoteka ili nije moguće upisati u nju");
@@ -57,9 +57,9 @@ public class VozilaCitac implements Citac<Automobil>{
         return listaAutomobila;
     }
 
-    private Automobil dodajVozilo(String[] odsjek) {
+    private Vozilo dodajVozilo(String[] odsjek) {
         NumberFormat format = NumberFormat.getInstance(Locale.GERMAN);
-        var a = new Automobil();
+        var a = new Vozilo();
 
         try {
             a.registracija = odsjek[0];
@@ -67,6 +67,11 @@ public class VozilaCitac implements Citac<Automobil>{
             a.tezina = format.parse(odsjek[2]).floatValue();
             a.prostor = format.parse(odsjek[3]).floatValue();
             a.redoslijed = Integer.parseInt(odsjek[4]);
+            a.prosjecnaBrzina = Integer.parseInt(odsjek[5]);
+            for(var element : odsjek[6].split(",")){
+                a.podrucja.add(Integer.parseInt(element));
+            }
+            a.status=odsjek[7];
 
         } catch (ParseException e) {
             e.printStackTrace();

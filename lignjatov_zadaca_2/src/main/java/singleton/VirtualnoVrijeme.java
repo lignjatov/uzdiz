@@ -13,6 +13,7 @@ public class VirtualnoVrijeme {
   private static volatile Timestamp trenutnoVrijeme;
 
   private static volatile LocalTime krajnjeVrijeme;
+  private static volatile LocalTime pocetnoPomicnoVrijeme;
 
   private static volatile int korekcija;
 
@@ -38,6 +39,11 @@ public class VirtualnoVrijeme {
     trenutnoVrijeme = Timestamp.valueOf(localDateTime);
   }
 
+  public void postaviPocetnoVrijeme(String pocetnoVrijeme){
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+    pocetnoPomicnoVrijeme = LocalTime.parse(pocetnoVrijeme, formatter);
+  }
+
   public void postaviKrajnjeVrijeme(String krajVrijeme){
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
     krajnjeVrijeme = LocalTime.parse(krajVrijeme, formatter);
@@ -51,11 +57,33 @@ public class VirtualnoVrijeme {
     return true;
   }
 
+  public boolean prosaoPuniSat(){
+    LocalTime trenutniRadniSati = trenutnoVrijeme.toLocalDateTime().toLocalTime();
+    if(trenutniRadniSati.isBefore(pocetnoPomicnoVrijeme)){
+      return false;
+    }
+    return true;
+  }
+
   public void pomakniVrijeme(int sekunde) {
     LocalDateTime localDateTime = LocalDateTime.from(trenutnoVrijeme.toLocalDateTime());
     int sekundeNove = sekunde * korekcija;
     localDateTime = localDateTime.plusSeconds(sekundeNove);
     trenutnoVrijeme = Timestamp.valueOf(localDateTime);
+  }
+
+  public Timestamp vrijemeVratiPomak(int hours){
+    LocalDateTime localDateTime = LocalDateTime.from(trenutnoVrijeme.toLocalDateTime());
+    localDateTime = localDateTime.plusHours(hours);
+    return Timestamp.valueOf(localDateTime);
+  }
+
+  public boolean prosloTrenutno(Timestamp vrijemeZaUsporedit){
+    return vrijemeZaUsporedit.before(trenutnoVrijeme);
+  }
+
+  public void pomakniSljedeciPuniSat(){
+    pocetnoPomicnoVrijeme = pocetnoPomicnoVrijeme.plusHours(1);
   }
 
   public Timestamp vratiVrijeme() {
@@ -65,5 +93,9 @@ public class VirtualnoVrijeme {
   public String vratiVrijemeString() {
     String datumFormatiran = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(trenutnoVrijeme);
     return datumFormatiran;
+  }
+
+  public boolean usporediDvaVremena(Timestamp vrijeme1, Timestamp vrijeme2){
+    return vrijeme1.before(vrijeme2);
   }
 }

@@ -51,6 +51,6 @@ public class Osoba implements Subscriber {
 
     @Override
     public void notificiraj(String context) {
-        System.out.println(ime + "primilo poruku: " + context);
+        System.out.println(ime + " primio poruku: " + context);
     }
 }

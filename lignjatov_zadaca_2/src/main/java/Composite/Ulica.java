@@ -67,6 +67,6 @@ public class Ulica implements Kutija {
 
     @Override
     public void ispisiText() {
-        System.out.println("--------Ulica je "+naziv);
+        System.out.println("        Ulica je "+naziv);
     }
 }
