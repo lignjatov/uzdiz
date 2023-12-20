@@ -10,13 +10,17 @@ import java.util.Properties;
 import java.util.Scanner;
 
 import Composite.*;
+import entity.Osoba;
 import entity.UredDostave;
 import entity.UredPrijema;
 import factory.Citac;
 import factory.DataFactory;
 import factory.VrsteCitaca;
 import helper.PropertyFiller;
+import implementation.Vozilo;
 import singleton.*;
+import visitor.KlijentiPosjetitelja;
+import visitor.PosjetiteljVoznji;
 
 import javax.xml.crypto.Data;
 
@@ -39,6 +43,7 @@ public class Tvrtka {
 
     String input = null;
     do {
+    	System.out.println("Trenutno vrijeme: " + virtualno.vratiVrijemeString());
       System.out.println("Komanda: ");
       input = unos.nextLine();
       if (input.contains("VR")) {
@@ -74,11 +79,94 @@ public class Tvrtka {
 
       if(input.contains("PS")){
         try{
-
           String[] komande = input.split(" ");
           String registracija = komande[1];
           String status = komande[2];
           uredDostave.promijeniStatusVozila(registracija,status);
+        }catch (Exception e){
+          System.out.println("Neispravna komanda");
+        }
+      }
+
+      if(input.contains("VV")){
+        try{
+          String vozilo = input.split(" ")[1];
+          Vozilo ispisVozilo = null;
+          for(var trazenoVozilo : uredDostave.dohvatiSveAute()){
+            if(trazenoVozilo.registracija.compareTo(vozilo)==0){
+              ispisVozilo=trazenoVozilo;
+            }
+          }
+          if(ispisVozilo==null){
+            System.out.println("Vozilo ne postoji");
+          }
+          else{
+            System.out.println("VRIJEME POČETKA | VRIJEME POVRATKA | TRAJANJE | BROJ PAKETA");
+
+            PosjetiteljVoznji posjetiteljVoznji = new PosjetiteljVoznji();
+            List<KlijentiPosjetitelja> dostave = ispisVozilo.vratiSveDostaveVisit();
+            posjetiteljVoznji.posaljiZahtjev(dostave);
+          }
+
+        }catch (Exception e){
+          System.out.println("Neispravna komanda");
+        }
+      }
+
+      if(input.contains("PO")){
+        try{
+          String[] alibaba = input.split("'");
+          int i=0;
+          String nazivOsobe = alibaba[1];
+          String[] paketKomanda = alibaba[2].split(" ");
+          String paketOznaka = paketKomanda[1];
+          String komanda = paketKomanda[2].trim();
+          Osoba osoba = pronadiOsobu(nazivOsobe);
+          if(osoba!=null){
+            for(var paket : DataRepository.getInstance().vratiListaPaketa()){
+              if(paket.getOznaka().compareTo(paketOznaka)==0){
+                if(komanda.contains("N")) {
+                  paket.makniPretplatnika(osoba);
+                  System.out.println("Osoba " + osoba.vratiIme() + " ne bude primala obavijesti za paket "+paket.getOznaka());
+                  break;
+                }
+                if(komanda.contains("D")){
+                  paket.dodajPretplatnika(osoba);
+                  System.out.println("Osoba " + osoba.vratiIme() + " bude primala obavijesti za paket "+paket.getOznaka());
+                  break;
+                }
+              }
+            }
+          }
+          else{
+            System.out.println("Osoba ne postoji");
+          }
+        }catch (Exception e){
+          System.out.println("Neispravna komanda");
+        }
+      }
+
+      if(input.contains("VS")){
+        try{
+          String vozilo = input.split(" ")[1];
+          String brojSegmenta = input.split(" ")[2];
+          Vozilo ispisVozilo = null;
+          for(var trazenoVozilo : uredDostave.dohvatiSveAute()){
+            if(trazenoVozilo.registracija.compareTo(vozilo)==0){
+              ispisVozilo=trazenoVozilo;
+            }
+          }
+          if(ispisVozilo==null){
+            System.out.println("Vozilo ne postoji");
+          }
+          else{
+            System.out.println("VRIJEME POČETKA | VRIJEME POVRATKA | TRAJANJE | BROJ PAKETA");
+
+            PosjetiteljVoznji posjetiteljVoznji = new PosjetiteljVoznji();
+            List<KlijentiPosjetitelja> segment = ispisVozilo.vratiDostavu(Integer.parseInt(brojSegmenta));
+            posjetiteljVoznji.posaljiZahtjev(segment);
+          }
+
         }catch (Exception e){
           System.out.println("Neispravna komanda");
         }
@@ -89,6 +177,13 @@ public class Tvrtka {
           break;
         case "PP":
           uredDostave.vratiSpremiste().ispisiText();
+          break;
+        case "SV":
+          System.out.println("NAZIV | STATUS | UKUPNO KM | BROJ PAKETA | TRENUTNO % | BROJ VOŽNJI");
+          PosjetiteljVoznji posjetiteljVoznji = new PosjetiteljVoznji();
+          List<KlijentiPosjetitelja> vozila = uredDostave.dohvatiAuteKaoKlijente();
+          posjetiteljVoznji.posaljiZahtjev(vozila);
+          break;
         case "Q":
           System.out.println("Izlazim iz programa");
           break;
@@ -107,26 +202,31 @@ public class Tvrtka {
     System.out.println("Trenutno vrijeme: " + virtualno.vratiVrijemeString());
     System.out.println(
         "VOZILO | PAKET | VRIJEME PRIJEMA | USLUGA | VRIJEME PREUZIMANJA | IZNOS DOSTAVE | STATUS");
-    /*
+
     for (var e : uredDostave.dohvatiSveAute()) {
-      for (var v : e.dohvatiPakete()) {
-        String rezultat = e.vratiIme() + " | ";
-        rezultat += v.toString();
-        if (v.getVrijemePreuzimanja() == null) {
-          rezultat += "|u primanju|";
-        } else {
-          if (virtualno.vratiVrijeme().compareTo(v.getVrijemePreuzimanja()) > 0) {
-            e.naplati(v);
-            rezultat += "|predano|";
-          } else {
-            rezultat += "|u dolasku|";
+      for (var v : e.vratiSveDostave()) {
+        for(var p : v.vratiSegmentiVoznje()){
+          if(p.paketDostave==null){
+            continue;
           }
+          String rezultat = e.registracija + " | ";
+          rezultat += p.paketDostave.toString() + " | ";
+          rezultat += p.paketDostave.getVrijemePrijema() + " | ";
+          rezultat += p.paketDostave.getUslugaDostave() + " | ";
+          rezultat += p.vratiVrijemeKraja() + " | ";
+          rezultat += p.paketDostave.getIznosPouzeca() + " | ";
+          if(virtualno.prosloTrenutno(p.vratiVrijemeKraja())){
+            rezultat += " predano";
+          }
+          else{
+            rezultat += " u tranzitu";
+          }
+          System.out.println(rezultat);
         }
-        System.out.println(rezultat);
+
       }
 
     }
-  */
   }
 
   private static void inicijalizirajStavke(String[] arg) throws IOException {
@@ -168,13 +268,19 @@ public class Tvrtka {
 
       citaci = factory.vratiCitac(VrsteCitaca.Osoba);
       data.postaviListuOsoba(citaci.ucitajPodatke(properties.getProperty("--po")));
-
-
-
-
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
+
+
+  private static Osoba pronadiOsobu(String imeOsobe){
+    for(var osoba : DataRepository.getInstance().vratiListaOsoba()){
+      if(osoba.vratiIme().compareTo(imeOsobe)==0){
+        return osoba;
+      }
+    }
+    return null;
+  }
 }

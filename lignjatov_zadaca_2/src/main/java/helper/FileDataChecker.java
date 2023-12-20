@@ -148,6 +148,18 @@ public class FileDataChecker {
     return "";
   }
 
+  public String provjeriUlicu(String[] odsjek) {
+    boolean greska = false;
+    String razlozi = "";
+
+    if (odsjek.length != 7) {
+      brojGresaka++;
+      greska = true;
+      razlozi += "Datum u krivom obliku;";
+    }
+    return "";
+  }
+
 
   ;
 }

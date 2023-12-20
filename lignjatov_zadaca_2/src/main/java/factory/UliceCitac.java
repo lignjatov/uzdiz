@@ -24,7 +24,7 @@ public class UliceCitac implements Citac<Ulica>{
             var citac = Files.newBufferedReader(putanja, Charset.forName("UTF-8"));
             while (true) {
                 var redak = citac.readLine();
-                if (redak == null)
+                if (redak == null || redak.compareTo("")==0)
                     break;
                 var odsjek = redak.split(";");
                 if (odsjek.length != 7) {
@@ -35,13 +35,13 @@ public class UliceCitac implements Citac<Ulica>{
                         continue;
                     }
                     //TODO: Napraviti provjere za ulice
-                    /*FileDataChecker checker = new FileDataChecker();
-                    String greske = checker.provjeriMjesto(odsjek);
+                    FileDataChecker checker = new FileDataChecker();
+                    String greske = checker.provjeriUlicu(odsjek);
                     if (!greske.isEmpty()) {
                         System.out.println(FileDataChecker.brojGresaka + ". " + greske);
                         System.out.println(redak);
                         continue;
-                    }*/
+                    }
                     listaUlica.add(dodajUlicu(odsjek));
                 }
             }

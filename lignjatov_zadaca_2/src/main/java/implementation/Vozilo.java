@@ -17,8 +17,10 @@ import state.State;
 import strategy.StrategijaIsporuciNajblizi;
 import strategy.StrategijaIsporuciPoredu;
 import strategy.StrategijeIsporuke;
+import visitor.KlijentiPosjetitelja;
+import visitor.VisitorI;
 
-public class Vozilo {
+public class Vozilo implements KlijentiPosjetitelja {
   public State stanjeVozila;
   public List<Dostava> dostava = new ArrayList<Dostava>();
   public String registracija;
@@ -29,8 +31,8 @@ public class Vozilo {
   public Integer prosjecnaBrzina;
   public List<Integer> podrucja = new ArrayList<>();
   public String status;
-  Float trenutnaTezina = (float) 0;
-  Float trenutnaVelicina = (float) 0;
+  public Float trenutnaTezina = (float) 0;
+  public Float trenutnaVelicina = (float) 0;
   public Integer trenutnoPodrucje = 0;
 
   StrategijeIsporuke strategijeIsporuke;
@@ -58,13 +60,15 @@ public class Vozilo {
     }
   }
   public void dostavi() {
-    for(var elementDostave : dostava){
-      if(elementDostave.status){
-        strategijeIsporuke.pripremiIsporuku(elementDostave);
-        promjeniStanje(new Isporuka(this));
+    if(this.status.compareTo("A")==0){
+      for(var elementDostave : dostava){
+        if(elementDostave.status){
+          strategijeIsporuke.pripremiIsporuku(elementDostave);
+          promjeniStanje(new Isporuka(this));
+        }
       }
+      stanjeVozila.isporuci();
     }
-    stanjeVozila.isporuci();
   }
 
   public void povratak(){
@@ -109,5 +113,26 @@ public class Vozilo {
       }
     }
     return null;
+  }
+  public void accept(VisitorI visitor){
+    visitor.posjetiVozilo(this);
+  }
+
+  public List<Dostava> vratiSveDostave(){
+    return dostava;
+  }
+
+  public List<KlijentiPosjetitelja> vratiSveDostaveVisit(){
+    List<KlijentiPosjetitelja> klijenti = new ArrayList<>();
+    for(KlijentiPosjetitelja vozilo : dostava){
+      klijenti.add(vozilo);
+    }
+    return klijenti;
+  }
+
+  public List<KlijentiPosjetitelja> vratiDostavu(int n){
+    List<KlijentiPosjetitelja> klijenti = new ArrayList<>();
+    klijenti.add(dostava.get(n-1));
+    return klijenti;
   }
 }

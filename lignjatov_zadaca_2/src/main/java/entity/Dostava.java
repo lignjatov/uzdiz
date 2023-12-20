@@ -1,12 +1,14 @@
 package entity;
 
 import Composite.Podrucje;
+import visitor.KlijentiPosjetitelja;
+import visitor.VisitorI;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Dostava {
+public class Dostava implements KlijentiPosjetitelja {
 
   List<Segment> segmentiVoznje = new ArrayList<>();
   Podrucje podrucjeDostave;
@@ -23,5 +25,12 @@ public class Dostava {
 
   public List<Segment> vratiSegmentiVoznje() {
     return segmentiVoznje;
+  }
+
+  public void postaviSegmenteVoznje(List<Segment> noviRedoslijed){
+    segmentiVoznje=noviRedoslijed;
+  }
+  public void accept(VisitorI visitor){
+    visitor.posjetiDostavu(this);
   }
 }

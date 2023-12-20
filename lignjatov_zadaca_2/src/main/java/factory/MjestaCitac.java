@@ -32,6 +32,9 @@ public class MjestaCitac implements Citac<Mjesto>{
                 var redak = citac.readLine();
                 if (redak == null)
                     break;
+                if(redak.compareTo("")==0){
+                    continue;
+                }
                 var odsjek = redak.split(";");
                 if (odsjek.length != 3) {
                     System.out.println("Nedovoljan broj atributa");

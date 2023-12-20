@@ -40,6 +40,10 @@ public class Mjesto implements Kutija {
     public void ispisiText() {
         System.out.println("    Mjesto je " + naziv);
         for(Kutija ulica : ulice){
+            if(ulica==null)
+            {
+                continue;
+            }
             ulica.ispisiText();
         }
     }

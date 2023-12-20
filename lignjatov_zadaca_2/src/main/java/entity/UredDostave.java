@@ -11,9 +11,9 @@ import Composite.*;
 import implementation.Vozilo;
 import singleton.DataRepository;
 import singleton.VirtualnoVrijeme;
-import state.Isporuka;
 import state.Povratak;
 import state.Ukrcavanje;
+import visitor.KlijentiPosjetitelja;
 
 public class UredDostave {
   List<Vozilo> vozniPark = new ArrayList<Vozilo>();
@@ -193,11 +193,28 @@ public class UredDostave {
       }
     }
     if(promijenjenoVozilo!=null && ispravnaKomanda){
-      promijenjenoVozilo.status=status;
-      System.out.println("Vozilu " + promijenjenoVozilo.registracija + " se postavlja status na " + status);
+      if(promijenjenoVozilo.status.contains("NI")){
+        System.out.println("Vozilo je neispravno i nemože mu se promijeniti status");
+      }
+      else{
+        promijenjenoVozilo.status=status;
+        System.out.println("Vozilu " + promijenjenoVozilo.registracija + " se postavlja status na " + status);
+      }
     }
     else{
       System.out.println("Vozilo nije pronađeno ili je neispravna komanda");
     }
+  }
+
+  public List<Vozilo> dohvatiSveAute() {
+    return vozniPark;
+  }
+
+  public List<KlijentiPosjetitelja> dohvatiAuteKaoKlijente(){
+    List<KlijentiPosjetitelja> klijenti = new ArrayList<>();
+    for(KlijentiPosjetitelja vozilo : vozniPark){
+      klijenti.add(vozilo);
+    }
+    return klijenti;
   }
 }

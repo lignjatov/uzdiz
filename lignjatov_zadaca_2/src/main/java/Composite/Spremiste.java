@@ -23,6 +23,9 @@ public class Spremiste implements Kutija{
             for(Kutija mjesta : podrucja.vratiListuKutija()){
                 Mjesto mjesto = (Mjesto) mjesta;
                 for(var ulice : mjesto.getUlice()){
+                    if(ulice==null){
+                        continue;
+                    }
                     Ulica ulicaa = (Ulica) ulice;
                     if(ulicaa.vratiNaziv().compareTo(ulica.vratiNaziv())==0){
                         return podrucja;

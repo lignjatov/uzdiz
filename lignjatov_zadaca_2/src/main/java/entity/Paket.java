@@ -1,6 +1,7 @@
 package entity;
 
 import observer.Subscriber;
+import singleton.DataRepository;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -38,19 +39,6 @@ public class Paket {
       this.uslugaDostave = target.uslugaDostave;
       this.iznosPouzeca = target.iznosPouzeca;
     }
-  }
-
-  @Override
-  public String toString() {
-    String rezultat = "|" + oznaka + " | " + vrijemePrijema + " | " + uslugaDostave + " | ";
-    if (vrijemePreuzimanja == null) {
-      rezultat += "nije definirano | ";
-    } else {
-
-      rezultat += vrijemePreuzimanja + " | ";
-    }
-    rezultat += iznosPouzeca + " | ";
-    return rezultat;
   }
 
   public Timestamp getVrijemePreuzimanja() {
@@ -152,7 +140,31 @@ public class Paket {
   }
 
   public void dodajPretplatnika(Subscriber osoba){
-    listaOsobaSubscriber.add(osoba);
+    if(!listaOsobaSubscriber.contains(osoba)){
+      listaOsobaSubscriber.add(osoba);
+    }
+  }
+
+  public void makniPretplatnika(Osoba osoba){
+    boolean osobaPronadena = false;
+    if(listaOsobaSubscriber.contains(osoba)){
+      osobaPronadena=true;
+      listaOsobaSubscriber.remove(osoba);
+    }
+    if(osobaPronadena){
+      //System.out.println("Osobi " + osoba.vratiIme() + "je promijenjen status primanja obavijesti za paket "+this.getOznaka());
+    }
+  }
+
+  @Override
+  public String toString() {
+    return this.oznaka;
+  }
+
+  public void ispisiPretplatnike(){
+    for (Subscriber osoba : listaOsobaSubscriber){
+      System.out.println("Osobi " + osoba.toString());
+    }
   }
 
   public void posaljiPorukuPretplatnicima(String poruka){

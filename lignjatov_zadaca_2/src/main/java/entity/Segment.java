@@ -1,9 +1,12 @@
 package entity;
 
+import visitor.KlijentiPosjetitelja;
+import visitor.VisitorI;
+
 import java.sql.Timestamp;
 import java.time.LocalTime;
 
-public class Segment {
+public class Segment implements KlijentiPosjetitelja {
     GPS odGPS;
     GPS doGPS;
     Float udaljenost;
@@ -69,9 +72,7 @@ public class Segment {
         this.ukupnoTrajanjeSegmenta = ukupnoTrajanjeSegmenta;
     }
 
-
-
-    public Float izracunajUdaljenost(GPS lokacija1, GPS lokacija2){
-        return null;
+    public void accept(VisitorI visitor){
+        visitor.posjetiSegment(this);
     }
 }
