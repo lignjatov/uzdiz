@@ -1,0 +1,7 @@
+Oznaka;Opis;Visina;Širina;Dužina;Maksimalna težina;Cijena;Cijena hitno;CijenaP;CijenaT
+A;pismo malo - 110x230x10 mm;0,110;0,230;0,010;0,5;2,00;5,00;0,00;0,00
+B;pismo veliko - 230x360x50 mm;0,230;0,360;0,500;1,5;5,00;10,00;0,00;0,00
+C;paket mali - 200x200x150 mm;0,200;0,200;0,150;3,0;10,00;25,00;0,00;0,00
+D;paket srednji - 300x200x200 mm;0,300;0,200;0,200;7,0;15,00;40,00;0,00;0,00
+E;paket veliki - 400x300x150 mm;0,400;0,300;0,150;15,0;25,00;70,00;0,00;0,00
+X;paket nestandardni - 1500x1000x2000 mm;1,500;1,000;2,000;0,0;50,00;120,00;100,00;1,00
