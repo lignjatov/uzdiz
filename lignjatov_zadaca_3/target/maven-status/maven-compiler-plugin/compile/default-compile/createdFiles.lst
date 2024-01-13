@@ -7,9 +7,11 @@ visitor/KlijentiPosjetitelja.class
 factory/OsobeCitac.class
 factory/DataFactory.class
 state/State.class
+Chain/Handler.class
 implementation/Vozilo.class
 helper/PropertyFiller.class
 entity/VrstaPaketa.class
+Chain/IP.class
 Composite/Podrucje.class
 factory/VrsteCitaca.class
 entity/Dostava.class
@@ -38,5 +40,7 @@ helper/ArgumentChecker.class
 visitor/PosjetiteljVoznji.class
 observer/Subscriber.class
 entity/Osoba.class
+Chain/BaseHandler.class
 implementation/PaketBuilder.class
+Chain/VR.class
 singleton/VirtualnoVrijeme.class

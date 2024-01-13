@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
 
+import Chain.Handler;
+import Chain.IP;
+import Chain.VR;
 import Composite.*;
 import entity.Osoba;
 import entity.UredDostave;
@@ -36,6 +39,8 @@ public class Tvrtka {
 
 
     Scanner unos = new Scanner(System.in);
+    VR testPocetak = new VR();
+    testPocetak.postaviSljedeci(new IP());
 
     UredPrijema uredPrijema = new UredPrijema();
     UredDostave uredDostave = new UredDostave();
@@ -46,6 +51,8 @@ public class Tvrtka {
     	System.out.println("Trenutno vrijeme: " + virtualno.vratiVrijemeString());
       System.out.println("Komanda: ");
       input = unos.nextLine();
+      testPocetak.handle(input,uredPrijema,uredDostave);
+      /*
       if (input.contains("VR")) {
         int pomak = 0;
         try {
@@ -188,7 +195,7 @@ public class Tvrtka {
           System.out.println("Izlazim iz programa");
           break;
         default:
-      }
+      }*/
     } while (input.compareTo("Q") != 0 && !virtualno.prosloVrijemeRada());
 
     if(virtualno.prosloVrijemeRada()){

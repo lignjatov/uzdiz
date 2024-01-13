@@ -9,6 +9,7 @@
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/factory/DataFactory.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/entity/GPS.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/singleton/DataRepository.java
+/home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/Chain/VR.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/factory/VrsteCitaca.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/helper/ArgumentChecker.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/main/Tvrtka.java
@@ -18,6 +19,7 @@
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/strategy/StrategijaIsporuciNajblizi.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/entity/Osoba.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/state/Povratak.java
+/home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/Chain/Handler.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/strategy/StrategijeIsporuke.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/helper/FileDataChecker.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/entity/Segment.java
@@ -28,7 +30,9 @@
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/singleton/VirtualnoVrijeme.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/entity/VrstaPaketa.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/visitor/PosjetiteljVoznji.java
+/home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/Chain/BaseHandler.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/implementation/PaketBuilder.java
+/home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/Chain/IP.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/state/Isporuka.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/factory/VrsteCitac.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/factory/VozilaCitac.java
