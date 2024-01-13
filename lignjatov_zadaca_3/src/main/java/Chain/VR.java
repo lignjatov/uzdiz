@@ -10,6 +10,7 @@ public class VR extends Handler{
             System.out.println("Predivno stanje VR");
             return true;
         }
+
         return rukujSljedeceg(komanda, uredPrijema, uredDostave);
     }
 }
