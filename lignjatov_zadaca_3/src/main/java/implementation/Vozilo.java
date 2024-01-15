@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Composite.Spremiste;
+import Prototype.PrototypeVozilo;
 import entity.Dostava;
 import entity.Paket;
 import entity.Segment;
@@ -20,9 +21,9 @@ import strategy.StrategijeIsporuke;
 import visitor.KlijentiPosjetitelja;
 import visitor.VisitorI;
 
-public class Vozilo implements KlijentiPosjetitelja {
+public class Vozilo implements KlijentiPosjetitelja, PrototypeVozilo {
   public State stanjeVozila;
-  public List<Dostava> dostava = new ArrayList<Dostava>();
+  public List<Dostava> dostava;
   public String registracija;
   public String opis;
   public Float tezina;
@@ -38,11 +39,33 @@ public class Vozilo implements KlijentiPosjetitelja {
   StrategijeIsporuke strategijeIsporuke;
 
   public Vozilo(){
+    dostava = new ArrayList<>();
     if(DataRepository.getInstance().vratiPostavke().getProperty("--isporuka").contains("2")){
       strategijeIsporuke = new StrategijaIsporuciPoredu();
     }
     else {
       strategijeIsporuke = new StrategijaIsporuciNajblizi();
+    }
+  }
+
+  public Vozilo(Vozilo vozilo) {
+    super();
+    this.strategijeIsporuke = vozilo.strategijeIsporuke;
+    this.registracija = vozilo.registracija;
+    this.opis = vozilo.opis;
+    this.tezina = vozilo.tezina;
+    this.prostor = vozilo.prostor;
+    this.redoslijed = vozilo.redoslijed;
+    this.prosjecnaBrzina = vozilo.prosjecnaBrzina;
+    this.podrucja = vozilo.podrucja;
+    this.status = vozilo.status;
+    this.trenutnaTezina = vozilo.trenutnaTezina;
+    this.trenutnaVelicina = vozilo.trenutnaVelicina;
+    this.trenutnoPodrucje = vozilo.trenutnoPodrucje;
+    this.stanjeVozila = vozilo.stanjeVozila;
+    this.dostava = new ArrayList<>();
+    for(var dostava : vozilo.vratiSveDostave()){
+      this.dodajDostavu(dostava.kloniraj());
     }
   }
 
@@ -134,5 +157,10 @@ public class Vozilo implements KlijentiPosjetitelja {
     List<KlijentiPosjetitelja> klijenti = new ArrayList<>();
     klijenti.add(dostava.get(n-1));
     return klijenti;
+  }
+
+  @Override
+  public Vozilo kloniraj() {
+    return new Vozilo(this);
   }
 }

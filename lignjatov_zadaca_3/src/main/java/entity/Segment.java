@@ -1,12 +1,29 @@
 package entity;
 
+import Prototype.PrototypeSegment;
 import visitor.KlijentiPosjetitelja;
 import visitor.VisitorI;
 
 import java.sql.Timestamp;
 import java.time.LocalTime;
 
-public class Segment implements KlijentiPosjetitelja {
+public class Segment implements KlijentiPosjetitelja, PrototypeSegment {
+
+    public Segment(){
+
+    }
+
+    public Segment(Segment seg){
+        this.odGPS = seg.odGPS;
+        this.doGPS = seg.doGPS;
+        this.udaljenost = seg.udaljenost;
+        this.vrijemePocetka = seg.vrijemePocetka;
+        this.vrijemeKraja = seg.vrijemeKraja;
+        this.trajanjeIsporuke = seg.trajanjeIsporuke;
+        this.ukupnoTrajanjeSegmenta = seg.ukupnoTrajanjeSegmenta;
+        this.paketDostave = seg.paketDostave;
+        this.odraden = seg.odraden;
+    }
     GPS odGPS;
     GPS doGPS;
     Float udaljenost;
@@ -74,5 +91,10 @@ public class Segment implements KlijentiPosjetitelja {
 
     public void accept(VisitorI visitor){
         visitor.posjetiSegment(this);
+    }
+
+    @Override
+    public Segment kloniraj() {
+        return new Segment(this);
     }
 }

@@ -1,5 +1,6 @@
 package entity;
 
+import Prototype.PrototypePaket;
 import observer.Subscriber;
 import singleton.DataRepository;
 
@@ -7,7 +8,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Paket {
+public class Paket implements PrototypePaket {
   String oznaka;
   Timestamp vrijemePrijema;
   Timestamp vrijemePreuzimanja;
@@ -38,6 +39,7 @@ public class Paket {
       this.tezina = target.tezina;
       this.uslugaDostave = target.uslugaDostave;
       this.iznosPouzeca = target.iznosPouzeca;
+      this.listaOsobaSubscriber = target.listaOsobaSubscriber;
     }
   }
 
@@ -171,5 +173,10 @@ public class Paket {
     for (var osoba : listaOsobaSubscriber){
        osoba.notificiraj(poruka);
     }
+  }
+
+  @Override
+  public Paket kloniraj() {
+    return new Paket(this);
   }
 }

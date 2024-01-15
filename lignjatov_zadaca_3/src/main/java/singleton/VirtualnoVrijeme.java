@@ -39,6 +39,10 @@ public class VirtualnoVrijeme {
     trenutnoVrijeme = Timestamp.valueOf(localDateTime);
   }
 
+  public void postaviVrijeme(Timestamp vrijeme) {
+    trenutnoVrijeme = vrijeme;
+  }
+
   public void postaviPocetnoVrijeme(String pocetnoVrijeme){
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
     pocetnoPomicnoVrijeme = LocalTime.parse(pocetnoVrijeme, formatter);

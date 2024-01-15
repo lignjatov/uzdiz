@@ -19,6 +19,7 @@ import factory.DataFactory;
 import factory.VrsteCitaca;
 import helper.PropertyFiller;
 import implementation.Vozilo;
+import memento.Memento;
 import singleton.*;
 import visitor.KlijentiPosjetitelja;
 import visitor.PosjetiteljVoznji;
@@ -44,7 +45,7 @@ public class Tvrtka {
 
     String input = null;
     do {
-    	System.out.println("Trenutno vrijeme: " + virtualno.vratiVrijemeString());
+      System.out.println("Trenutno vrijeme: " + virtualno.vratiVrijemeString());
       System.out.println("Komanda: ");
       input = unos.nextLine();
       izbornik.handle(input,uredPrijema,uredDostave);
@@ -107,6 +108,7 @@ public class Tvrtka {
             .postaviSljedeci(new SV())
             .postaviSljedeci(new VS())
             .postaviSljedeci(new VV())
+            .postaviSljedeci(new SPV())
             .postaviSljedeci(new Q());
   }
 }

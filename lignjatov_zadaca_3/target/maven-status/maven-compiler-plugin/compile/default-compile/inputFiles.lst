@@ -3,6 +3,7 @@
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/entity/UredDostave.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/factory/Citac.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/helper/PropertyFiller.java
+/home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/Chain/SPV.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/Chain/VS.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/entity/Dostava.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/factory/DataFactory.java
@@ -19,6 +20,7 @@
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/singleton/VirtualnoVrijeme.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/observer/Subscriber.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/factory/UliceCitac.java
+/home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/memento/Memento.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/implementation/Vozilo.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/entity/UredPrijema.java
 /home/NWTiS_1/uzdiz/uzdiz/lignjatov_zadaca_3/src/main/java/state/Ukrcavanje.java

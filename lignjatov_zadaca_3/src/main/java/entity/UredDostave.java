@@ -4,11 +4,13 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
 import Composite.*;
 import implementation.Vozilo;
+import memento.Memento;
 import singleton.DataRepository;
 import singleton.VirtualnoVrijeme;
 import state.Povratak;
@@ -17,9 +19,7 @@ import visitor.KlijentiPosjetitelja;
 
 public class UredDostave {
   List<Vozilo> vozniPark = new ArrayList<Vozilo>();
-
   Spremiste spremiste = new Spremiste();
-
   List<Paket> paketiZaDostavu = new ArrayList<Paket>();
 
   public UredDostave() {
@@ -210,11 +210,34 @@ public class UredDostave {
     return vozniPark;
   }
 
-  public List<KlijentiPosjetitelja> dohvatiAuteKaoKlijente(){
+  public List<KlijentiPosjetitelja> dohvatiAuteKaoKlijente() {
     List<KlijentiPosjetitelja> klijenti = new ArrayList<>();
-    for(KlijentiPosjetitelja vozilo : vozniPark){
+    for (KlijentiPosjetitelja vozilo : vozniPark) {
       klijenti.add(vozilo);
     }
     return klijenti;
+  }
+
+  public Memento stvoriSlikuUreda(String naziv){
+    List<Vozilo> voziloList = new ArrayList<Vozilo>();
+    List<Paket> paketList = new ArrayList<Paket>();
+
+    for (var voz : vozniPark){
+      Vozilo spremanjeVozila = new Vozilo();
+      spremanjeVozila = voz.kloniraj();
+      voziloList.add(spremanjeVozila);
+    }
+    for (var pak : paketiZaDostavu){
+      Paket spremanjePaketa = new Paket();
+      spremanjePaketa = pak.kloniraj();
+      paketList.add(spremanjePaketa);
+    }
+    return new Memento(naziv, voziloList, paketList, VirtualnoVrijeme.getInstance().vratiVrijeme());
+  }
+
+
+  public void vratiSliku(Memento naziv){
+    this.vozniPark = naziv.vratiVozilo();
+    this.paketiZaDostavu = naziv.vratiPaket();
   }
 }

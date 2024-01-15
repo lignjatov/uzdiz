@@ -19,7 +19,7 @@ public class VR extends Handler{
                     System.out.println("Trenutno vrijeme: " + virtualno.vratiVrijemeString());
                     uredDostave.provjeriStanjaDostava();
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(10);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

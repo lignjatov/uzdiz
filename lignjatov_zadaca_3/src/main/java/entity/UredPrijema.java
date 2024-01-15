@@ -30,6 +30,8 @@ public class UredPrijema {
     return listaZaDostavu;
   }
 
+
+
   private boolean provjeriNovePakete() {
     var trenutnoVrijeme = VirtualnoVrijeme.getInstance().vratiVrijeme();
     if (zadnjeVrijeme.compareTo(trenutnoVrijeme) < 0) {

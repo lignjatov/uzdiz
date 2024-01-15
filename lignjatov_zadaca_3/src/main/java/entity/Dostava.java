@@ -1,6 +1,7 @@
 package entity;
 
 import Composite.Podrucje;
+import Prototype.PrototypeDostava;
 import visitor.KlijentiPosjetitelja;
 import visitor.VisitorI;
 
@@ -8,10 +9,20 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Dostava implements KlijentiPosjetitelja {
+public class Dostava implements KlijentiPosjetitelja, PrototypeDostava {
 
+  public Dostava(){
+
+  }
+  public Dostava(Dostava dostava){
+    super();
+    for(var a : dostava.vratiSegmentiVoznje()){
+      Segment kopiraniSegment = a.kloniraj();
+      this.segmentiVoznje.add(kopiraniSegment);
+    }
+    this.status = dostava.status;
+  }
   List<Segment> segmentiVoznje = new ArrayList<>();
-  Podrucje podrucjeDostave;
   public boolean status=false;
 
 
@@ -32,5 +43,10 @@ public class Dostava implements KlijentiPosjetitelja {
   }
   public void accept(VisitorI visitor){
     visitor.posjetiDostavu(this);
+  }
+
+  @Override
+  public Dostava kloniraj() {
+    return new Dostava(this);
   }
 }
