@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import memento.Memento;
 import singleton.DataRepository;
 import singleton.VirtualnoVrijeme;
 
@@ -44,11 +45,12 @@ public class UredPrijema {
   private void zapisiPaket(Timestamp trenutnoVrijeme) {
     List<Paket> paketi = DataRepository.getInstance().vratiListaPaketa();
     for (Paket p : paketi) {
+      
       if (p.getVrijemePrijema().compareTo(trenutnoVrijeme) < 0
           && p.getVrijemePrijema().compareTo(zadnjeVrijeme) > 0) {
         listaPrimljenihPaketa.add(p);
         naplatiIznosDostave(p);
-        zadnjeVrijeme = p.getVrijemePrijema();
+        postaviZadnjeVrijeme(p.getVrijemePrijema());
       }
     }
   }
@@ -106,4 +108,11 @@ public class UredPrijema {
   }
 
 
+  public void postaviZadnjeVrijeme(Timestamp vrijeme){
+    this.zadnjeVrijeme = vrijeme;
+  }
+
+  public void vratiSliku(Memento naziv){
+    this.zadnjeVrijeme=naziv.vratiZadnjeVrijeme();
+  }
 }

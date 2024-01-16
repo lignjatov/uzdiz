@@ -48,6 +48,10 @@ public class VirtualnoVrijeme {
     pocetnoPomicnoVrijeme = LocalTime.parse(pocetnoVrijeme, formatter);
   }
 
+  public LocalTime vratiPomicnoVrijeme(){
+    return pocetnoPomicnoVrijeme;
+  }
+
   public void postaviKrajnjeVrijeme(String krajVrijeme){
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
     krajnjeVrijeme = LocalTime.parse(krajVrijeme, formatter);

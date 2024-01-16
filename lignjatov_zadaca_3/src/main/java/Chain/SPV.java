@@ -17,8 +17,9 @@ public class SPV extends Handler{
             try{
                 String[] podaciKomande = komanda.split("'");
                 spremiStanjeDostave(uredDostave.stvoriSlikuUreda(podaciKomande[1]));
+
             }catch (Exception e){
-                System.out.println("Neispravna komanda");
+                System.out.println(e.getMessage());
             }
             return true;
         }
@@ -29,8 +30,11 @@ public class SPV extends Handler{
                 if(stanje==null)
                     return rukujSljedeceg(komanda,uredPrijema,uredDostave);
                 uredDostave.vratiSliku(stanje);
-
+                uredPrijema.vratiSliku(stanje);
                 VirtualnoVrijeme.getInstance().postaviVrijeme(stanje.vratiVrijeme());
+                VirtualnoVrijeme.getInstance().postaviPocetnoVrijeme(stanje.vratiVrijeme().toLocalDateTime().toLocalTime().toString());
+                VirtualnoVrijeme.getInstance().pomakniSljedeciPuniSat();
+
             }catch (Exception e){
                 System.out.println("Neispravna komanda");
             }

@@ -14,7 +14,9 @@ import entity.UredDostave;
 import singleton.DataRepository;
 import singleton.VirtualnoVrijeme;
 import state.Isporuka;
+import state.Povratak;
 import state.State;
+import state.Ukrcavanje;
 import strategy.StrategijaIsporuciNajblizi;
 import strategy.StrategijaIsporuciPoredu;
 import strategy.StrategijeIsporuke;
@@ -50,6 +52,7 @@ public class Vozilo implements KlijentiPosjetitelja, PrototypeVozilo {
 
   public Vozilo(Vozilo vozilo) {
     super();
+
     this.strategijeIsporuke = vozilo.strategijeIsporuke;
     this.registracija = vozilo.registracija;
     this.opis = vozilo.opis;
@@ -63,6 +66,15 @@ public class Vozilo implements KlijentiPosjetitelja, PrototypeVozilo {
     this.trenutnaVelicina = vozilo.trenutnaVelicina;
     this.trenutnoPodrucje = vozilo.trenutnoPodrucje;
     this.stanjeVozila = vozilo.stanjeVozila;
+    if(vozilo.stanjeVozila instanceof Ukrcavanje){
+     this.promjeniStanje(new Ukrcavanje(this));
+    }
+    if(vozilo.stanjeVozila instanceof Isporuka){
+      this.promjeniStanje(new Isporuka(this));
+    }
+    if(vozilo.stanjeVozila instanceof Povratak){
+      this.promjeniStanje(new Povratak(this));
+    }
     this.dostava = new ArrayList<>();
     for(var dostava : vozilo.vratiSveDostave()){
       this.dodajDostavu(dostava.kloniraj());

@@ -21,6 +21,7 @@ public class Paket implements PrototypePaket {
   Float tezina;
   String uslugaDostave;
   Float iznosPouzeca;
+
   public boolean status=false;
 
   List<Subscriber> listaOsobaSubscriber = new ArrayList<Subscriber>();
@@ -40,6 +41,7 @@ public class Paket implements PrototypePaket {
       this.uslugaDostave = target.uslugaDostave;
       this.iznosPouzeca = target.iznosPouzeca;
       this.listaOsobaSubscriber = target.listaOsobaSubscriber;
+      this.status = target.status;
     }
   }
 
