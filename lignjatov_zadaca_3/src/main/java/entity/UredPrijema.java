@@ -45,12 +45,12 @@ public class UredPrijema {
   private void zapisiPaket(Timestamp trenutnoVrijeme) {
     List<Paket> paketi = DataRepository.getInstance().vratiListaPaketa();
     for (Paket p : paketi) {
-      
-      if (p.getVrijemePrijema().compareTo(trenutnoVrijeme) < 0
+      Paket testniPaket = p.kloniraj();
+      if (testniPaket.getVrijemePrijema().compareTo(trenutnoVrijeme) < 0
           && p.getVrijemePrijema().compareTo(zadnjeVrijeme) > 0) {
-        listaPrimljenihPaketa.add(p);
-        naplatiIznosDostave(p);
-        postaviZadnjeVrijeme(p.getVrijemePrijema());
+        listaPrimljenihPaketa.add(testniPaket);
+        naplatiIznosDostave(testniPaket);
+        postaviZadnjeVrijeme(testniPaket.getVrijemePrijema());
       }
     }
   }
