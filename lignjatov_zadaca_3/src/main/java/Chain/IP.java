@@ -2,17 +2,16 @@ package Chain;
 
 import decorator.IIspisTekstaIP;
 import decorator.IspisPodatakaIP;
+import decorator.IspisCijenaDostava;
 import entity.UredDostave;
 import entity.UredPrijema;
-import singleton.VirtualnoVrijeme;
 
 public class IP extends Handler{
     @Override
     public boolean handle(String komanda, UredPrijema uredPrijema, UredDostave uredDostave) {
         if(komanda.startsWith("IP")){
-            IspisPodatakaIP ispis = new IspisPodatakaIP(uredDostave);
-
-            ispis.ispisiPodatke();
+            IIspisTekstaIP ispis = new IspisCijenaDostava(new IspisPodatakaIP());
+            ispis.ispisiPodatke(uredDostave);
             return true;
         }
         return rukujSljedeceg(komanda, uredPrijema, uredDostave);
