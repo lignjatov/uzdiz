@@ -6,10 +6,9 @@ import singleton.VirtualnoVrijeme;
 public class IspisPodatakaIP implements IIspisTekstaIP{
 
     UredDostave uredDostave;
-    public IspisPodatakaIP(UredDostave ured){
-        uredDostave = ured;
+    public IspisPodatakaIP(){
     }
-    public void ispisiPodatke() {
+    public void ispisiPodatke(UredDostave uredDostave) {
         VirtualnoVrijeme virtualno = VirtualnoVrijeme.getInstance();
         System.out.println("Trenutno vrijeme: " + virtualno.vratiVrijemeString());
         System.out.println(

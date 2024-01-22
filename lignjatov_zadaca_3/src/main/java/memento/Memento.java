@@ -20,7 +20,6 @@ public class Memento {
 
     private Timestamp virtualnoVrijeme;
     private Timestamp zadnjeVrijeme;
-
     private LocalTime vrijemeRadaSustava;
 
     public Memento(String nazivStanja, List<Vozilo> spremljenaVozila, List<Paket> spremljeniPaketi, Timestamp virtualnoVrijeme){

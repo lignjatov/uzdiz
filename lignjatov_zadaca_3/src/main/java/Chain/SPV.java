@@ -16,6 +16,7 @@ public class SPV extends Handler{
         if(komanda.startsWith("SPV")){
             try{
                 String[] podaciKomande = komanda.split("'");
+                System.out.println("Spremljeno stanje vozila i paketa!");
                 spremiStanjeDostave(uredDostave.stvoriSlikuUreda(podaciKomande[1]));
 
             }catch (Exception e){
@@ -27,8 +28,11 @@ public class SPV extends Handler{
             try{
                 String[] podaciKomande = komanda.split("'");
                 Memento stanje = vratiStanje(podaciKomande[1]);
-                if(stanje==null)
+                if(stanje==null){
+                    System.out.println("Stanje nije pronađeno!");
                     return rukujSljedeceg(komanda,uredPrijema,uredDostave);
+                }
+                System.out.println("Vraćeno stanje vozila i paketa na zadano");
                 uredDostave.vratiSliku(stanje);
                 uredPrijema.vratiSliku(stanje);
                 VirtualnoVrijeme.getInstance().postaviVrijeme(stanje.vratiVrijeme());

@@ -6,7 +6,7 @@ import entity.UredPrijema;
 public class PS extends Handler{
     @Override
     public boolean handle(String komanda, UredPrijema uredPrijema, UredDostave uredDostave) {
-        if(komanda.matches("PS")){
+        if(komanda.startsWith("PS")){
             try{
                 String[] komande = komanda.split(" ");
                 String registracija = komande[1];

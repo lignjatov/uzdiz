@@ -1,30 +1,17 @@
 package main;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
 
 import Chain.*;
-import Composite.*;
-import entity.Osoba;
 import entity.UredDostave;
 import entity.UredPrijema;
 import factory.Citac;
 import factory.DataFactory;
 import factory.VrsteCitaca;
 import helper.PropertyFiller;
-import implementation.Vozilo;
-import memento.Memento;
 import singleton.*;
-import visitor.KlijentiPosjetitelja;
-import visitor.PosjetiteljVoznji;
 
-import javax.xml.crypto.Data;
 
 public class Tvrtka {
 
